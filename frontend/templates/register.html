@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Registre-se hoje!</h1>
+    <form method="post" id ="registerForm" action="/auth/registrar">
+        <label for="username">Informe seu nome de usuário:</label><br>
+        <input type="text" id="username" name="username" required>
+        <br><br>
+
+        <label for="nome">Informe seu primeiro nome:</label><br>
+        <input type="text" id="nome" name="nome" required>
+        <br><br>
+
+        <label for="sobrenome">Informe seu sobrenome:</label><br>
+        <input type="text" id="sobrenome" name="sobrenome" required>
+        <br><br>
+
+        <label for="email">Informe seu email:</label><br>
+        <input type="email" id="email" name="email" required>      
+        <br><br>
+
+        <label for="senha">Informe sua Senha:</label><br>
+        <input type="password" id="senha" name="senha" required>
+        <br><br>
+
+        <label for="confirmar_senha">Confirme sua Senha:</label><br>
+        <input type="password" id="confirmar_senha" name="confirmar_senha" required><br>
+        <br><br>
+
+        <button type="submit">Registrar</button>
+
+    </form>
+{% endblock %}
+
+{% block scripts%}
+
+    const registerForm = document.getElementById('registerForm');
+    const senhaInput = document.getElementById('senha');
+    const confirmarSenhaInput = document.getElementById('confirmar_senha');
+
+    registerForm.addEventListener('submit', async(event) => {
+        event.preventDefault();
+
+        const formData = new FormData(registerForm);
+        const userData ={
+            username: formData.get('username'),
+            nome: formData.get('nome'),
+            sobrenome: formData.get('sobrenome'),
+            email: formData.get('email'),
+        }
+        try{
+            const response = await fetch('/auth/registrar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+        }catch(error){
+            console.error(error);
+        }
+    });
+    
+
+{% endblock %}

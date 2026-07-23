@@ -1,0 +1,12 @@
+# Segredos
+.env
+
+# Python
+__pycache__/
+*.db
+
+# Ambiente
+.venv/
+
+# Editor
+.vscode/

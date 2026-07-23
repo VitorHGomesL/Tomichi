@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomichi - Seu Companheiro de Jornada</title>
+    <link rel="stylesheet"
+            href="{{ url_for('static', path='base.css') }}">
+</head>
+<body>
+    <header>
+        <a> Tomichi</a>
+        <nav>
+            <ul>
+                <li>
+                    <a href="{{ url_for('homepage') }}">Home</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('register_page') }}">Registrar-se</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('login_page') }}">Login</a>                  
+                </li>
+            </ul>
+        </nav>
+        
+    </header>    
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+        <script>
+        {% block scripts %} 
+        {% endblock scripts %}  
+        </script>
+    </main> 
+     
+    <footer>
+        <div>
+            <p>
+                ©<span id="year"></span> Vitor Gomes
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+
+</body>
+</html>
