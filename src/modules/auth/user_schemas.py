@@ -1,5 +1,4 @@
 from pydantic import BaseModel, ConfigDict, Field, EmailStr
-from uuid import UUID
 
 from datetime import datetime
 
@@ -25,11 +24,11 @@ class UserBase(BaseModel):
         max_length=50)
 
 class UserCreate(UserBase):
-    #hashed_password: str = Field(..., min_length=3, max_length=50)
-    pass
+    password: str = Field(..., min_length=3, max_length=50)
+
 
 class UserResponse(UserBase):
     model_config = ConfigDict(from_attributes=True)
 
-    id: UUID
+    user_id: int
     created_at: datetime

@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime
-from uuid import UUID
+from src.modules.auth.user_schemas import UserResponse
 
 class TaskBase(BaseModel):
     title: str = Field(
@@ -18,13 +18,12 @@ class TaskCreate(TaskBase):
     due_date: datetime | None = None
 
 class TaskResponse(TaskBase):
-    model_config = ConfigDict(from_attributes=True)
-
-    id: UUID
-    user_id: UUID
+    task_id: int #TEMPORARY
+    user_id: int #TEMPORARY
     created_at: datetime
     due_date: datetime | None
     updated_at: datetime | None
+    author: UserResponse
 
 class TaskUpdate(TaskBase):
     title: str | None = Field(
@@ -38,3 +37,7 @@ class TaskUpdate(TaskBase):
         max_length=500
     )
 
+    due_date: datetime | None
+
+class TaskUpdateResponse(TaskUpdate):
+    updated_at: datetime | None

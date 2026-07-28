@@ -4,16 +4,19 @@ from uuid import UUID
 from sqlalchemy import DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.modules.auth.user_models import User
+from typing import TYPE_CHECKING
 
 from datetime import datetime, UTC
+
+if TYPE_CHECKING:
+    from src.modules.auth.user_models import User    
 
 class Task(Base):
     __tablename__ = "tasks"
 
-    task_id: Mapped[UUID] = mapped_column(UUID, primary_key=True, index=True)
+    task_id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
 
-    user_id: Mapped[UUID] = mapped_column(
+    user_id: Mapped[int] = mapped_column(
         ForeignKey("users.user_id"),
         nullable=False,
         index=True
@@ -30,7 +33,7 @@ class Task(Base):
 
     due_date:Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=lambda:datetime.now(UTC),
+        
     )
 
     updated_at: Mapped[datetime] = mapped_column(
@@ -38,4 +41,4 @@ class Task(Base):
         default=lambda:datetime.now(UTC),
     )
 
-    author: Mapped[User] = relationship(back_populates="tasks")
+    author: Mapped["User"] = relationship(back_populates="tasks")
