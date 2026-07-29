@@ -6,7 +6,9 @@ from sqlalchemy.orm import Session
 
 from src.database.session import get_db
 from src.modules.auth.user_models import User
-from src.modules.auth.user_schemas import UserCreate, UserResponse
+from src.modules.auth.user_schemas import UserCreate, UserLogin, UserResponse
+from src.security.password import hash_password, verify_password
+
 
 api_auth_router = APIRouter(prefix="/api/v1/auth", tags=["auth API"])
 
@@ -40,7 +42,7 @@ async def create_user(user: UserCreate, db: Annotated[Session, Depends(get_db)])
         first_name=user.first_name,
         last_name=user.last_name,
         email=user.email,
-        password=user.password,
+        password_hash=hash_password(user.password),
     )
 
     db.add(new_user)
@@ -60,3 +62,24 @@ def get_user(user_id: int, db: Annotated[Session, Depends(get_db)]):
     if user:
         return user
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+@api_auth_router.post("/login", response_model=UserResponse)
+def UserNameLogin(user: UserLogin, db: Annotated[Session, Depends(get_db)]):
+    result = db.execute(
+        select(User).where(User.username == user.username)
+    )
+    UserInDB = result.scalars().first()
+
+    if not UserInDB:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+       
+    correct_password = verify_password(user.password, UserInDB.password_hash)
+
+    if correct_password:
+        print("Função funcional!!!")
+        return UserInDB
+    
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid username or password",
+    )

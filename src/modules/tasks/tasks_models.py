@@ -21,9 +21,13 @@ class Task(Base):
         index=True,
     )
 
-    title: Mapped[str] = mapped_column(String(100), nullable=False)
+    title: Mapped[str] = mapped_column(
+        String(100), 
+        nullable=False)
 
-    content: Mapped[str] = mapped_column(Text, nullable=False)
+    content: Mapped[str] = mapped_column(
+        Text, 
+        nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
@@ -32,6 +36,7 @@ class Task(Base):
 
     due_date: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
+        nullable=True,
     )
 
     updated_at: Mapped[datetime] = mapped_column(

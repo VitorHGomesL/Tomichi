@@ -17,9 +17,15 @@ async def get_user_tasks(user_id: int, db: Annotated[Session, Depends(get_db)]):
     result = db.execute(
         select(User).where(User.user_id == user_id)
     )
+
     user = result.scalars().first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
     tasks = user.tasks
+
+    if not tasks:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
     return tasks
 
