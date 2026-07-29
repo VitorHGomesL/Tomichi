@@ -1,79 +1,183 @@
 {% extends "base.html" %}
 
+{% block title %}Criar conta — Tomichi{% endblock %}
+{% block description %}Crie sua conta no Tomichi e prepare seu espaço para organizar tasks.{% endblock %}
+{% block body_class %}page-auth page-register{% endblock %}
+
 {% block content %}
-    <h1>Registre-se hoje!</h1>
-    <form method="post" id ="registerForm" action="/api/v1/auth/registrar">
-        <label for="username">Informe seu nome de usuário:</label><br>
-        <input type="text" id="username" name="username" required>
-        <br><br>
+<section class="auth-layout" aria-labelledby="register-title">
+  <aside class="auth-story auth-story--register">
+    <a class="auth-story__back" href="{{ url_for('homepage') }}">← voltar para o início</a>
+    <div>
+      <small>SEU ESPAÇO, SEU RITMO</small>
+      <h1 id="register-title">Vamos começar <em>pequeno.</em></h1>
+      <p>
+        Uma conta é o primeiro passo para tirar tarefas da cabeça, escolher prioridades
+        e voltar ao que importa sem começar tudo de novo.
+      </p>
+    </div>
+    <blockquote><span aria-hidden="true">✦</span> “A organização deve abrir espaço, não ocupar mais espaço.”</blockquote>
+  </aside>
 
-        <label for="first_name">Informe seu primeiro nome:</label><br>
-        <input type="text" id="first_name" name="first_name" required>
-        <br><br>
+  <div class="auth-panel">
+    <div class="auth-heading">
+      <small>01 — SUA CONTA</small>
+      <h2>Como podemos te chamar?</h2>
+      <p>Preencha os dados abaixo. Todos os campos são obrigatórios.</p>
+    </div>
 
-        <label for="last_name">Informe seu sobrenome:</label><br>
-        <input type="text" id="last_name" name="last_name" required>
-        <br><br>
+    <form
+      class="form"
+      action="{{ url_for('create_user') }}"
+      method="post"
+      data-auth-form="register"
+      novalidate
+    >
+      <div class="form__row">
+        <div class="field">
+          <label for="first-name">Primeiro nome</label>
+          <input
+            id="first-name"
+            name="first_name"
+            autocomplete="given-name"
+            minlength="3"
+            maxlength="30"
+            aria-describedby="first-name-error"
+            placeholder="Vitor"
+            required
+          >
+          <span class="field__error" id="first-name-error" data-error-for="first_name"></span>
+        </div>
 
-        <label for="email">Informe seu email:</label><br>
-        <input type="email" id="email" name="email" required>      
-        <br><br>
+        <div class="field">
+          <label for="last-name">Sobrenome</label>
+          <input
+            id="last-name"
+            name="last_name"
+            autocomplete="family-name"
+            minlength="3"
+            maxlength="50"
+            aria-describedby="last-name-error"
+            placeholder="Gomes"
+            required
+          >
+          <span class="field__error" id="last-name-error" data-error-for="last_name"></span>
+        </div>
+      </div>
 
-        <label for="password">Informe sua Senha:</label><br>
-        <input type="password" id="password" name="password" required>
-        <br><br>
+      <div class="field">
+        <label for="register-username">Nome de usuário</label>
+        <div class="field__control">
+          <i aria-hidden="true">@</i>
+          <input
+            class="with-prefix"
+            id="register-username"
+            name="username"
+            autocomplete="username"
+            minlength="3"
+            maxlength="50"
+            aria-describedby="username-help username-error"
+            placeholder="vitorgomes"
+            required
+          >
+        </div>
+        <small id="username-help">De 3 a 50 caracteres. Este será seu nome visível no Tomichi.</small>
+        <span class="field__error" id="username-error" data-error-for="username"></span>
+      </div>
 
-        <label for="confirm_password">Confirme sua Senha:</label><br>
-        <input type="password" id="confirm_password" name="confirm_password" required><br>
-        <div id="passwordError" class="text-danger d-none">Passwords do not match.</div>
-        <br><br>
+      <div class="field">
+        <label for="register-email">E-mail</label>
+        <input
+          id="register-email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          maxlength="50"
+          aria-describedby="email-error"
+          placeholder="voce@exemplo.com"
+          required
+        >
+        <span class="field__error" id="email-error" data-error-for="email"></span>
+      </div>
 
-        <button type="submit">Registrar</button>
+      <div class="form__row">
+        <div class="field">
+          <label for="register-password">Senha</label>
+          <div class="field__control">
+            <input
+              class="with-action"
+              id="register-password"
+              name="password"
+              type="password"
+              autocomplete="new-password"
+              minlength="3"
+              maxlength="50"
+              aria-describedby="password-help password-strength password-error"
+              required
+            >
+            <button type="button" data-password-toggle="register-password">ver</button>
+          </div>
+          <small id="password-help">O backend aceita de 3 a 50 caracteres; prefira uma senha longa e única.</small>
+          <small class="password-strength" id="password-strength" data-password-strength aria-live="polite"></small>
+          <span class="field__error" id="password-error" data-error-for="password"></span>
+        </div>
+
+        <div class="field">
+          <label for="confirm-password">Confirmar senha</label>
+          <div class="field__control">
+            <input
+              class="with-action"
+              id="confirm-password"
+              name="confirm_password"
+              type="password"
+              autocomplete="new-password"
+              minlength="3"
+              maxlength="50"
+              aria-describedby="confirm-password-error"
+              required
+            >
+            <button type="button" data-password-toggle="confirm-password">ver</button>
+          </div>
+          <span
+            class="field__error"
+            id="confirm-password-error"
+            data-error-for="confirm_password"
+          ></span>
+        </div>
+      </div>
+
+      <div
+        class="notice"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-form-notice
+        hidden
+      ></div>
+
+      <button class="button button--primary button--wide" type="submit">
+        <span data-submit-label>Criar meu espaço</span>
+        <span aria-hidden="true">→</span>
+      </button>
+
+      <p class="form__alternate">
+        Já tem uma conta? <a href="{{ url_for('login_page') }}">Entrar no Tomichi</a>
+      </p>
     </form>
+
+    <section class="auth-success" data-register-success hidden tabindex="-1" aria-labelledby="success-title">
+      <i aria-hidden="true">✓</i>
+      <small>CONTA CRIADA</small>
+      <h2 id="success-title">Seu espaço começou a ganhar forma.</h2>
+      <p>Bem-vindo, <b data-created-user>por aqui</b>. Agora você já pode entrar.</p>
+      <a class="button button--ink button--wide" href="{{ url_for('login_page') }}">
+        Ir para o login <span aria-hidden="true">→</span>
+      </a>
+    </section>
+  </div>
+</section>
 {% endblock %}
 
-{% block scripts%}
-
-    const registerForm = document.getElementById('registerForm');
-    const passwordInput = document.getElementById('password');
-    const confirmPasswordInput = document.getElementById('confirm_password');
-    const passwordError = document.getElementById('passwordError');
-
-          // Check passwords match on input
-      confirmPasswordInput.addEventListener('input', () => {
-        if (passwordInput.value !== confirmPasswordInput.value) {
-          passwordError.classList.remove('d-none');
-          confirmPasswordInput.setCustomValidity('Passwords do not match');
-        } else {
-          passwordError.classList.add('d-none');
-          confirmPasswordInput.setCustomValidity('');
-        }
-      });
-
-
-    registerForm.addEventListener('submit', async(event) => {
-        event.preventDefault();
-        const formData = new FormData(registerForm);
-        const userData = {
-            username: formData.get('username'),
-            first_name: formData.get('first_name'),
-            last_name: formData.get('last_name'),
-            email: formData.get('email'),
-            password: formData.get('password')
-        };
-        try{
-            const response = await fetch('/api/v1/auth/registrar', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(userData)
-            });
-            console.log(response)
-        }catch(error){
-            console.error(error);
-        }
-    });
-    
-
+{% block scripts %}
+<script src="{{ url_for('static', path='static/js/auth.js') }}" defer></script>
 {% endblock %}

@@ -1,48 +1,107 @@
 {% extends "base.html" %}
 
+{% block title %}Entrar — Tomichi{% endblock %}
+{% block description %}Entre no Tomichi para acessar e organizar suas tasks.{% endblock %}
+{% block body_class %}page-auth page-login{% endblock %}
+
 {% block content %}
-    <h1>Login</h1>
-    <form method="post" id ="loginForm" action="/api/v1/auth/login">
-        <label for="username">Informe seu nome de usuário:</label><br>
-        <input type="text" id="username" name="username" required>
-        <br><br>
+<section class="auth-layout" aria-labelledby="login-title">
+  <aside class="auth-story auth-story--login">
+    <a class="auth-story__back" href="{{ url_for('homepage') }}">← voltar para o início</a>
+    <div>
+      <small>QUE BOM TE VER DE NOVO</small>
+      <h1 id="login-title">Voltar também <em>é progresso.</em></h1>
+      <p>
+        Seu espaço continua aqui quando a rotina permitir. Entre, olhe para o que
+        está pendente e escolha apenas o próximo passo.
+      </p>
+    </div>
+    <div class="orbit" aria-hidden="true"><i></i><i></i><i></i></div>
+  </aside>
 
+  <div class="auth-panel auth-panel--compact">
+    <div class="auth-heading">
+      <small>BEM-VINDO DE VOLTA</small>
+      <h2>Entre no seu espaço</h2>
+      <p>Use o nome de usuário e a senha cadastrados.</p>
+    </div>
 
-        <label for="password">Informe sua Senha:</label><br>
-        <input type="password" id="password" name="password" required>
-        <br><br>
+    <form
+      class="form"
+      action="/api/v1/auth/login"
+      method="post"
+      data-auth-form="login"
+      data-success-url="/logged/dashboard"
+      novalidate
+    >
+      <div class="field">
+        <label for="login-username">Nome de usuário</label>
+        <div class="field__control">
+          <i aria-hidden="true">@</i>
+          <input
+            class="with-prefix"
+            id="login-username"
+            name="username"
+            autocomplete="username"
+            minlength="3"
+            maxlength="50"
+            aria-describedby="login-username-error"
+            placeholder="seu_usuario"
+            required
+          >
+        </div>
+        <span
+          class="field__error"
+          id="login-username-error"
+          data-error-for="username"
+        ></span>
+      </div>
 
-        <button type="submit">Login</button>
+      <div class="field">
+        <label for="login-password">Senha</label>
+        <div class="field__control">
+          <input
+            class="with-action"
+            id="login-password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            minlength="3"
+            maxlength="50"
+            aria-describedby="login-password-error"
+            required
+          >
+          <button type="button" data-password-toggle="login-password">ver</button>
+        </div>
+        <span
+          class="field__error"
+          id="login-password-error"
+          data-error-for="password"
+        ></span>
+      </div>
+
+      <div
+        class="notice"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-form-notice
+        hidden
+      ></div>
+
+      <button class="button button--ink button--wide" type="submit">
+        <span data-submit-label>Entrar no Tomichi</span>
+        <span aria-hidden="true">→</span>
+      </button>
+
+      <p class="form__alternate">
+        Ainda não tem uma conta? <a href="{{ url_for('register_page') }}">Criar meu espaço</a>
+      </p>
     </form>
+  </div>
+</section>
 {% endblock %}
 
-{% block scripts%}
-
-    const loginForm = document.getElementById('loginForm');
-    const passwordInput = document.getElementById('password');
-    const passwordError = document.getElementById('passwordError');
-
-    loginForm.addEventListener('submit', async(event) => {
-        event.preventDefault();
-
-        const formData = new FormData(loginForm);
-        const userData = {
-            username: formData.get('username'),
-            password: formData.get('password')
-        };
-        try{
-            const response = await fetch('/api/v1/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(userData)
-            });
-            console.log(response)
-        }catch(error){
-            console.error(error);
-        }
-    });
-    
-
+{% block scripts %}
+<script src="{{ url_for('static', path='static/js/auth.js') }}" defer></script>
 {% endblock %}

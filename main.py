@@ -12,6 +12,8 @@ from src.modules.pages.homepage_routes import homepage_router
 from src.modules.tasks.tasks_models import Task  # noqa: F401
 from src.modules.tasks.tasks_routes import tasks_router
 from tests.tests_routes import tests_router
+from src.modules.pages.logged_routes import logged_router
+
 
 Base.metadata.create_all(bind=engine)
 
@@ -32,4 +34,4 @@ app.include_router(web_auth_router)
 app.include_router(homepage_router)
 app.include_router(tests_router)
 app.include_router(tasks_router)
-app.include_router(fake_db_router)
+app.include_router(logged_router)

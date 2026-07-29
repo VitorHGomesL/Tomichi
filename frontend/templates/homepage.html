@@ -1,14 +1,158 @@
 {% extends "base.html" %}
 
+{% block title %}Tomichi — organize o próximo passo{% endblock %}
+{% block description %}Crie, acompanhe e reorganize suas tasks em um espaço simples, acolhedor e sem excesso de cobrança.{% endblock %}
+{% block body_class %}page-home{% endblock %}
+
 {% block content %}
-    <h1>Bem vindo ao Tomichi!</h1>
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__copy">
+    <p class="eyebrow"><span aria-hidden="true"></span> Um lugar gentil para continuar</p>
+    <h1 id="hero-title">Seu dia não precisa virar <em>uma planilha.</em></h1>
+    <p class="hero__lead">
+      Transforme o que está na sua cabeça em próximos passos claros. Crie tasks,
+      escolha prazos e reorganize o dia sem transformar produtividade em culpa.
+    </p>
+    <div class="hero__actions">
+      <a class="button button--primary" href="{{ url_for('register_page') }}">
+        Criar meu espaço <span aria-hidden="true">↗</span>
+      </a>
+      <a class="text-link" href="#como-funciona">
+        Quero entender primeiro <span aria-hidden="true">↓</span>
+      </a>
+    </div>
+    <p class="hero__note"><span aria-hidden="true">✦</span> um passo possível ainda é progresso</p>
+  </div>
 
-    <h2>Grandes mudanças não acontecem sozinhas.</h2>
-<div>
-    Criar novos hábitos é difícil. Manter a constância é ainda mais... <br>
-    
-    <br>Mas com o Tomichi, você organiza sua rotina, acompanha seu progresso e pode compartilhar sua jornada com alguém de confiança — um psicólogo, terapeuta, mentor, amigo ou familiar.
+  <div class="hero__visual">
+    <p class="preview-label">Prévia ilustrativa</p>
+    <div class="task-board" aria-label="Demonstração interativa de uma lista de tasks">
+      <span class="task-board__tape" aria-hidden="true"></span>
+      <div class="task-board__head">
+        <div>
+          <small>HOJE · NO SEU RITMO</small>
+          <h2>Um passo de cada vez.</h2>
+        </div>
+        <span class="task-board__mood" aria-label="Humor tranquilo">:)</span>
+      </div>
 
-    Porque evoluir fica mais fácil quando alguém caminha ao seu lado.
-</div>
+      <div class="task-board__list" data-demo-task-list>
+        <button class="demo-task is-done" type="button" aria-pressed="true">
+          <i aria-hidden="true"></i>
+          <span><b>Responder aquele e-mail</b><small>feito agora há pouco</small></span>
+        </button>
+        <button class="demo-task" type="button" aria-pressed="false">
+          <i aria-hidden="true"></i>
+          <span><b>Separar 20 minutos para estudar</b><small>prazo: hoje</small></span>
+        </button>
+        <button class="demo-task" type="button" aria-pressed="false">
+          <i aria-hidden="true"></i>
+          <span><b>Organizar a mesa</b><small>quando houver espaço</small></span>
+        </button>
+      </div>
+
+      <div class="task-board__progress">
+        <p><span>ritmo de hoje</span><b data-demo-progress-copy>1 de 3</b></p>
+        <div
+          class="progress"
+          role="progressbar"
+          aria-label="Tasks concluídas na demonstração"
+          aria-valuemin="0"
+          aria-valuemax="3"
+          aria-valuenow="1"
+          data-demo-progress
+        >
+          <i></i>
+        </div>
+      </div>
+    </div>
+    <div class="sticky-note" aria-hidden="true">
+      <i></i>
+      <b>você não precisa<br>fazer tudo hoje.</b>
+      <small>— só escolher o próximo passo</small>
+    </div>
+  </div>
+</section>
+
+<aside class="manifesto">
+  <p>Menos “dar conta de tudo”. <strong>Mais clareza para decidir o que vem agora.</strong></p>
+</aside>
+
+<section class="how" id="como-funciona" aria-labelledby="how-title">
+  <div class="section-title">
+    <span>01 / COMO FUNCIONA</span>
+    <h2 id="how-title">O necessário para organizar suas tasks, sem transformar o app em trabalho.</h2>
+  </div>
+
+  <ol class="steps">
+    <li>
+      <span>01</span>
+      <div>
+        <h3>Registre o que importa</h3>
+        <p>Dê nome ao próximo passo, acrescente o contexto necessário e escolha um prazo apenas quando ele ajudar.</p>
+      </div>
+      <i class="shape shape--circle" aria-hidden="true"></i>
+    </li>
+    <li>
+      <span>02</span>
+      <div>
+        <h3>Enxergue o todo</h3>
+        <p>Consulte suas tasks em um único painel e identifique com facilidade o que tem prazo, o que atrasou e o que pode esperar.</p>
+      </div>
+      <i class="shape shape--loop" aria-hidden="true"></i>
+    </li>
+    <li>
+      <span>03</span>
+      <div>
+        <h3>Reorganize sem atrito</h3>
+        <p>Edite ou exclua uma task quando o plano mudar. A ferramenta se adapta ao dia — não o contrário.</p>
+      </div>
+      <i class="shape shape--spark" aria-hidden="true">✦</i>
+    </li>
+  </ol>
+</section>
+
+<section class="features" id="recursos" aria-labelledby="features-title">
+  <div class="features__intro">
+    <span class="section-index">02 / RECURSOS DO MVP</span>
+    <h2 id="features-title">Tudo no lugar certo. Nada sobrando.</h2>
+    <p>
+      O primeiro MVP do Tomichi se concentra no fluxo essencial: criar sua conta,
+      entrar no seu espaço e cuidar da lista de tasks.
+    </p>
+  </div>
+
+  <div class="feature-grid">
+    <article class="feature-card feature-card--pink">
+      <span aria-hidden="true">01</span>
+      <h3>Conta e acesso</h3>
+      <p>Registro com validações claras e login direto, com mensagens que ajudam a corrigir o problema.</p>
+    </article>
+    <article class="feature-card feature-card--paper">
+      <span aria-hidden="true">02</span>
+      <h3>Painel pessoal</h3>
+      <p>Resumo rápido da sua lista, busca local e estados claros para carregamento, lista vazia ou falha.</p>
+    </article>
+    <article class="feature-card feature-card--lavender">
+      <span aria-hidden="true">03</span>
+      <h3>CRUD completo</h3>
+      <p>Crie, consulte, edite e exclua tasks em uma interface responsiva, com confirmação nas ações destrutivas.</p>
+    </article>
+  </div>
+</section>
+
+<section class="home-quote" aria-label="Princípio do produto">
+  <span aria-hidden="true">“</span>
+  <blockquote>Organizar não é prever um dia perfeito. É deixar o próximo passo um pouco mais visível.</blockquote>
+</section>
+
+<section class="cta" aria-labelledby="cta-title">
+  <div>
+    <small>QUANDO ESTIVER PRONTO, A GENTE COMEÇA.</small>
+    <h2 id="cta-title">Crie um cantinho para o seu próximo passo.</h2>
+  </div>
+  <a class="button button--paper" href="{{ url_for('register_page') }}">
+    Criar minha conta <span aria-hidden="true">→</span>
+  </a>
+</section>
 {% endblock %}
