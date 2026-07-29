@@ -7,12 +7,12 @@
         <input type="text" id="username" name="username" required>
         <br><br>
 
-        <label for="nome">Informe seu primeiro nome:</label><br>
-        <input type="text" id="nome" name="nome" required>
+        <label for="first_name">Informe seu primeiro nome:</label><br>
+        <input type="text" id="first_name" name="first_name" required>
         <br><br>
 
-        <label for="sobrenome">Informe seu sobrenome:</label><br>
-        <input type="text" id="sobrenome" name="sobrenome" required>
+        <label for="last_name">Informe seu sobrenome:</label><br>
+        <input type="text" id="last_name" name="last_name" required>
         <br><br>
 
         <label for="email">Informe seu email:</label><br>
@@ -40,13 +40,13 @@
     registerForm.addEventListener('submit', async(event) => {
         event.preventDefault();
         const formData = new FormData(registerForm);
-        const userData ={
+        const userData = {
             username: formData.get('username'),
-            nome: formData.get('nome'),
-            sobrenome: formData.get('sobrenome'),
+            first_name: formData.get('first_name'),
+            last_name: formData.get('last_name'),
             email: formData.get('email'),
             password: formData.get('senha')
-        }
+        };
         try{
             const response = await fetch('/api/v1/auth/registrar', {
                 method: 'POST',
