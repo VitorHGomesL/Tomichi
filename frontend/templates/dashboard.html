@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+
+{% block title %}Meu espaço — Tomichi{% endblock %}
+{% block description %}Painel pessoal para consultar, criar, editar e excluir tasks no Tomichi.{% endblock %}
+{% block body_class %}page-dashboard{% endblock %}
+
+{% block navigation %}
+<a href="#minhas-tasks">Minhas tasks</a>
+<button class="nav-action" type="button" data-open-task-dialog>Nova task</button>
+<button class="nav-action nav-action--muted" type="button" data-logout>Sair</button>
+{% endblock %}
+
+{% block content %}
+<section
+  class="dashboard"
+  data-dashboard
+  data-user-id="[-------ATENÇÃO!!!!!!!!!!!!----------SUBSTITUIR-AQUI-POR:-----{[(user_id)]}-----------]"
+>
+  <header class="dashboard-hero">
+    <div>
+      <p class="eyebrow"><span aria-hidden="true"></span> Seu espaço de hoje</p>
+      <h1>
+        Oi,
+        <span data-user-first-name>[-------ATENÇÃO!!!!!!!!!!!!----------SUBSTITUIR-AQUI-POR:-----{[(first_name)]}-----------]</span>.
+      </h1>
+      <p>Olhe para o que está na mesa e escolha o próximo passo possível.</p>
+    </div>
+
+    <aside class="profile-note" aria-label="Resumo da conta">
+      <span class="profile-note__pin" aria-hidden="true"></span>
+      <small>CONTA ATUAL</small>
+      <strong data-user-username>
+        @[-------ATENÇÃO!!!!!!!!!!!!----------SUBSTITUIR-AQUI-POR:-----{[(username)]}-----------]
+      </strong>
+      <span data-user-email>
+        [-------ATENÇÃO!!!!!!!!!!!!----------SUBSTITUIR-AQUI-POR:-----{[(email)]}-----------]
+      </span>
+    </aside>
+  </header>
+
+  <div class="dashboard-summary" aria-label="Resumo das tasks">
+    <article>
+      <span aria-hidden="true">✦</span>
+      <div>
+        <strong data-total-tasks>[-------ATENÇÃO!!!!!!!!!!!!----------SUBSTITUIR-AQUI-POR:-----{[(total_tasks)]}-----------]</strong>
+        <small>tasks no total</small>
+      </div>
+    </article>
+    <article>
+      <span aria-hidden="true">↗</span>
+      <div>
+        <strong data-upcoming-tasks>[-------ATENÇÃO!!!!!!!!!!!!----------SUBSTITUIR-AQUI-POR:-----{[(upcoming_tasks)]}-----------]</strong>
+        <small>com prazo futuro</small>
+      </div>
+    </article>
+    <article>
+      <span aria-hidden="true">!</span>
+      <div>
+        <strong data-overdue-tasks>[-------ATENÇÃO!!!!!!!!!!!!----------SUBSTITUIR-AQUI-POR:-----{[(overdue_tasks)]}-----------]</strong>
+        <small>com prazo vencido</small>
+      </div>
+    </article>
+    <article>
+      <span aria-hidden="true">○</span>
+      <div>
+        <strong data-undated-tasks>[-------ATENÇÃO!!!!!!!!!!!!----------SUBSTITUIR-AQUI-POR:-----{[(undated_tasks)]}-----------]</strong>
+        <small>sem prazo definido</small>
+      </div>
+    </article>
+  </div>
+
+  <section class="task-section" id="minhas-tasks" aria-labelledby="tasks-title">
+    <div class="task-section__heading">
+      <div>
+        <span class="section-index">MINHA LISTA</span>
+        <h2 id="tasks-title">Tasks</h2>
+      </div>
+      <button class="button button--primary" type="button" data-open-task-dialog>
+        <span aria-hidden="true">＋</span> Nova task
+      </button>
+    </div>
+
+    <div class="task-toolbar">
+      <div class="search-field">
+        <label for="task-search">Buscar nas suas tasks</label>
+        <span aria-hidden="true">⌕</span>
+        <input
+          id="task-search"
+          type="search"
+          placeholder="Título ou conteúdo"
+          autocomplete="off"
+          data-task-search
+        >
+      </div>
+      <div class="filter-group" role="group" aria-label="Filtrar tasks por prazo">
+        <button class="is-active" type="button" data-task-filter="all" aria-pressed="true">Todas</button>
+        <button type="button" data-task-filter="dated" aria-pressed="false">Com prazo</button>
+        <button type="button" data-task-filter="undated" aria-pressed="false">Sem prazo</button>
+      </div>
+    </div>
+
+    <div class="task-state" data-task-loading role="status">
+      <span class="loader" aria-hidden="true"></span>
+      <div><strong>Buscando suas tasks…</strong><p>Isso deve levar só um instante.</p></div>
+    </div>
+
+    <div class="task-state task-state--error" data-task-error role="alert" hidden>
+      <span aria-hidden="true">!</span>
+      <div>
+        <strong>Não foi possível carregar suas tasks.</strong>
+        <p data-task-error-message>Tente novamente em alguns instantes.</p>
+        <button class="text-button" type="button" data-retry-tasks>Tentar novamente</button>
+      </div>
+    </div>
+
+    <div class="task-state" data-task-empty role="status" aria-live="polite" aria-atomic="true" hidden>
+      <span aria-hidden="true">✦</span>
+      <div>
+        <strong data-empty-title>Sua lista ainda está vazia.</strong>
+        <p data-empty-copy>Crie a primeira task e deixe o próximo passo mais visível.</p>
+        <button class="text-button" type="button" data-open-task-dialog>Criar primeira task</button>
+      </div>
+    </div>
+
+    <div class="task-grid" data-task-list></div>
+
+    <template data-task-template>
+      <article
+        class="task-card"
+        data-task-card
+        data-task-id="[-------ATENÇÃO!!!!!!!!!!!!----------SUBSTITUIR-AQUI-POR:-----{[(task_id)]}-----------]"
+      >
+        <header class="task-card__header">
+          <span class="deadline-badge" data-task-deadline>
+            [-------ATENÇÃO!!!!!!!!!!!!----------SUBSTITUIR-AQUI-POR:-----{[(task_due_date)]}-----------]
+          </span>
+          <div class="task-card__actions">
+            <button type="button" data-edit-task>Editar<span class="sr-only"> task</span></button>
+            <button class="danger-link" type="button" data-delete-task>
+              Excluir<span class="sr-only"> task</span>
+            </button>
+          </div>
+        </header>
+        <h3 data-task-title>
+          [-------ATENÇÃO!!!!!!!!!!!!----------SUBSTITUIR-AQUI-POR:-----{[(task_title)]}-----------]
+        </h3>
+        <p data-task-content>
+          [-------ATENÇÃO!!!!!!!!!!!!----------SUBSTITUIR-AQUI-POR:-----{[(task_content)]}-----------]
+        </p>
+        <footer class="task-card__meta">
+          <span>
+            Criada em
+            <time data-task-created>
+              [-------ATENÇÃO!!!!!!!!!!!!----------SUBSTITUIR-AQUI-POR:-----{[(task_created_at)]}-----------]
+            </time>
+          </span>
+          <span>
+            Atualizada em
+            <time data-task-updated>
+              [-------ATENÇÃO!!!!!!!!!!!!----------SUBSTITUIR-AQUI-POR:-----{[(task_updated_at)]}-----------]
+            </time>
+          </span>
+        </footer>
+      </article>
+    </template>
+  </section>
+</section>
+
+<dialog class="modal" data-task-dialog aria-labelledby="task-dialog-title">
+  <form class="modal__panel form" data-task-form novalidate>
+    <header class="modal__header">
+      <div>
+        <small data-task-dialog-eyebrow>NOVA TASK</small>
+        <h2 id="task-dialog-title" data-task-dialog-title>O que precisa acontecer?</h2>
+      </div>
+      <button class="icon-button" type="button" aria-label="Fechar" data-close-task-dialog>×</button>
+    </header>
+
+    <input
+      name="task_id"
+      type="hidden"
+      value="[-------ATENÇÃO!!!!!!!!!!!!----------SUBSTITUIR-AQUI-POR:-----{[(task_id)]}-----------]"
+    >
+
+    <div class="field">
+      <label for="task-title">Título</label>
+      <input
+        id="task-title"
+        name="title"
+        minlength="2"
+        maxlength="100"
+        aria-describedby="task-title-help task-title-error"
+        required
+      >
+      <div class="field__meta">
+        <small id="task-title-help">De 2 a 100 caracteres.</small>
+        <small><span data-title-count>0</span>/100</small>
+      </div>
+      <span class="field__error" id="task-title-error" data-task-error-for="title"></span>
+    </div>
+
+    <div class="field">
+      <label for="task-content">Descrição</label>
+      <textarea
+        id="task-content"
+        name="content"
+        rows="6"
+        minlength="5"
+        maxlength="500"
+        aria-describedby="task-content-help task-content-error"
+        required
+      ></textarea>
+      <div class="field__meta">
+        <small id="task-content-help">Inclua apenas o contexto que vai ajudar você depois.</small>
+        <small><span data-content-count>0</span>/500</small>
+      </div>
+      <span class="field__error" id="task-content-error" data-task-error-for="content"></span>
+    </div>
+
+    <div class="field">
+      <label for="task-due-date">Prazo <span>(opcional)</span></label>
+      <input
+        id="task-due-date"
+        name="due_date"
+        type="datetime-local"
+        aria-describedby="task-due-date-help task-due-date-error"
+      >
+      <small id="task-due-date-help">A data será enviada para a API no formato ISO 8601.</small>
+      <span class="field__error" id="task-due-date-error" data-task-error-for="due_date"></span>
+    </div>
+
+    <div class="notice" role="alert" aria-live="assertive" data-task-form-notice hidden></div>
+
+    <footer class="modal__actions">
+      <button class="button button--ghost" type="button" data-close-task-dialog>Cancelar</button>
+      <button class="button button--primary" type="submit">
+        <span data-task-submit-label>Criar task</span>
+        <span aria-hidden="true">→</span>
+      </button>
+    </footer>
+  </form>
+</dialog>
+
+<dialog class="modal modal--small" data-delete-dialog aria-labelledby="delete-dialog-title">
+  <div class="modal__panel">
+    <span class="danger-mark" aria-hidden="true">!</span>
+    <small>CONFIRMAR EXCLUSÃO</small>
+    <h2 id="delete-dialog-title">Excluir esta task?</h2>
+    <p>
+      “<strong data-delete-task-title>[-------ATENÇÃO!!!!!!!!!!!!----------SUBSTITUIR-AQUI-POR:-----{[(task_title)]}-----------]</strong>”
+      será removida. Esta ação não pode ser desfeita pela interface.
+    </p>
+    <div class="notice" role="alert" aria-live="assertive" data-delete-notice hidden></div>
+    <footer class="modal__actions">
+      <button class="button button--ghost" type="button" data-close-delete-dialog>Cancelar</button>
+      <button class="button button--danger" type="button" data-confirm-delete>
+        <span data-delete-label>Excluir task</span>
+      </button>
+    </footer>
+  </div>
+</dialog>
+
+<div class="toast" role="status" aria-live="polite" aria-atomic="true" data-dashboard-notice hidden></div>
+{% endblock %}
+
+{% block footer %}
+<footer class="dashboard-footer">
+  <p>Tomichi · organização com espaço para a vida real.</p>
+  <small>© <span data-current-year></span> Vitor Gomes</small>
+</footer>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', path='static/js/tasks.js') }}" defer></script>
+{% endblock %}

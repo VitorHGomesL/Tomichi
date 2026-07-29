@@ -14,3 +14,4 @@ async def register_page(request: Request):
 @web_auth_router.get("/login")
 async def login_page(request: Request):
     return templates.TemplateResponse(request, "login.html")
+
