@@ -1,28 +1,35 @@
-from fastapi import FastAPI, Request
-from src.modules.auth.auth_routes import auth_router
-from src.modules.homepage.homepage_routes import homepage_router
-from fastapi.staticfiles import StaticFiles
+from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
-from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
+from src.database.connection import engine
+from src.database.db_tests import fake_db_router
+from src.database.session import Base
+from src.modules.auth.api_routes import api_auth_router
+from src.modules.auth.user_models import User  # noqa: F401
+from src.modules.auth.web_routes import web_auth_router
+from src.modules.pages.homepage_routes import homepage_router
+from src.modules.tasks.tasks_models import Task  # noqa: F401
+from src.modules.tasks.tasks_routes import tasks_router
+from tests.tests_routes import tests_router
 
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
+app.mount("/media", StaticFiles(directory="media"), name="media")
 
-templates = Jinja2Templates(directory="frontend/templates")
 
 @app.get("/")
 async def root():
-    """
-    Redirects to the homepage."""
+    """Redirect to the homepage."""
     return RedirectResponse(url="/homepage")
 
 
-app.include_router(auth_router)
+app.include_router(api_auth_router)
+app.include_router(web_auth_router)
 app.include_router(homepage_router)
-
-
-from src.database.db_tests import fake_db_router
+app.include_router(tests_router)
+app.include_router(tasks_router)
 app.include_router(fake_db_router)
