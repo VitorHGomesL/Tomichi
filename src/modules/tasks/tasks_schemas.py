@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from src.modules.auth.user_schemas import UserResponse
+from src.modules.auth.user_schemas import UserPublic
 
 
 class TaskBase(BaseModel):
@@ -22,7 +22,7 @@ class TaskResponse(TaskBase):
     created_at: datetime
     due_date: datetime | None
     updated_at: datetime | None
-    author: UserResponse
+    author: UserPublic
 
 
 class TaskUpdate(TaskBase):

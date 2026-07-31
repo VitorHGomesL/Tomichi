@@ -6,12 +6,12 @@ from sqlalchemy.orm import Session
 
 from src.database.session import get_db
 from src.modules.auth.user_models import User
-from src.modules.auth.user_schemas import UserResponse
+from src.modules.auth.user_schemas import UserPublic
 
 tests_router = APIRouter(prefix="/tests", tags=["Tests"])
 
 
-@tests_router.get("/getallusers", response_model=list[UserResponse])
+@tests_router.get("/getallusers", response_model=list[UserPublic])
 async def get_users(db: Annotated[Session, Depends(get_db)]):
     result = db.execute(select(User))
     users = result.scalars().all()
