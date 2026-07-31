@@ -6,14 +6,14 @@ from sqlalchemy.orm import Session
 
 from src.database.session import get_db
 from src.modules.auth.user_models import User
-from src.modules.auth.user_schemas import UserCreate, UserLogin, UserResponse
+from src.modules.auth.user_schemas import UserCreate, UserLogin, UserPublic
 from src.security.password import hash_password, verify_password
 
 
 api_auth_router = APIRouter(prefix="/api/v1/auth", tags=["auth API"])
 
 
-@api_auth_router.post("/registrar", response_model=UserResponse)
+@api_auth_router.post("/registrar", response_model=UserPublic)
 async def create_user(user: UserCreate, db: Annotated[Session, Depends(get_db)]):
     result = db.execute(
         select(User).where(User.username == user.username)
@@ -52,7 +52,7 @@ async def create_user(user: UserCreate, db: Annotated[Session, Depends(get_db)])
     return new_user
 
 
-@api_auth_router.get("/{user_id}", response_model=UserResponse)
+@api_auth_router.get("/{user_id}", response_model=UserPublic)
 def get_user(user_id: int, db: Annotated[Session, Depends(get_db)]):
     result = db.execute(
         select(User).where(User.user_id == user_id)
@@ -63,7 +63,7 @@ def get_user(user_id: int, db: Annotated[Session, Depends(get_db)]):
         return user
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
-@api_auth_router.post("/login", response_model=UserResponse)
+@api_auth_router.post("/login", response_model=UserPublic)
 def UserNameLogin(user: UserLogin, db: Annotated[Session, Depends(get_db)]):
     result = db.execute(
         select(User).where(User.username == user.username)
@@ -75,7 +75,7 @@ def UserNameLogin(user: UserLogin, db: Annotated[Session, Depends(get_db)]):
        
     correct_password = verify_password(user.password, UserInDB.password_hash)
 
-    if correct_password:
+    if correct_password and UserInDB:
         print("Função funcional!!!")
         return UserInDB
     
