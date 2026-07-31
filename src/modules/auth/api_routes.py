@@ -1,12 +1,12 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.orm import Session
 
 from src.database.session import get_db
 from src.modules.auth.user_models import User
-from src.modules.auth.user_schemas import UserCreate, UserLogin, UserPublic
+from src.modules.auth.user_schemas import UserCreate, UserLogin, UserPublic, UserPrivate
 from src.security.password import hash_password, verify_password
 
 
@@ -16,7 +16,7 @@ api_auth_router = APIRouter(prefix="/api/v1/auth", tags=["auth API"])
 @api_auth_router.post("/registrar", response_model=UserPublic)
 async def create_user(user: UserCreate, db: Annotated[Session, Depends(get_db)]):
     result = db.execute(
-        select(User).where(User.username == user.username)
+        select(User).where(func.lower(User.username) == user.username.lower())
     )
     existing_user = result.scalars().first()
 
@@ -27,21 +27,21 @@ async def create_user(user: UserCreate, db: Annotated[Session, Depends(get_db)])
         )
 
     result = db.execute(
-        select(User).where(User.email == user.email)
+        select(User).where(func.lower(User.email) == user.email.lower)
     )
-    existing_user = result.scalars().first()
+    existing_email = result.scalars().first()
 
-    if existing_user:
+    if existing_email:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email Already exists",
         )
 
     new_user = User(
-        username=user.username,
+        username=user.username.lower(),
         first_name=user.first_name,
         last_name=user.last_name,
-        email=user.email,
+        email=user.email.lower(),
         password_hash=hash_password(user.password),
     )
 
@@ -63,7 +63,7 @@ def get_user(user_id: int, db: Annotated[Session, Depends(get_db)]):
         return user
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
-@api_auth_router.post("/login", response_model=UserPublic)
+@api_auth_router.post("/login", response_model=UserPrivate)
 def UserNameLogin(user: UserLogin, db: Annotated[Session, Depends(get_db)]):
     result = db.execute(
         select(User).where(User.username == user.username)
